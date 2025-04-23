@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         BROWSER = 'chrome'
-        REMOTE_URL = 'http://selenoid:4444/wd/hub'
+        REMOTE_URL = 'http://selenoid:4444/wd/hub/'
     }
     stages {
         stage('Checkout') {
