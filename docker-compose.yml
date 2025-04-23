@@ -1,31 +1,40 @@
-version: '3'
 services:
   selenoid:
-    image: aerokube/selenoid
-    container_name: selenoid
-    network_mode: "bridge"
-    restart: always
+    image: "aerokube/selenoid"
+    network_mode: bridge
     ports:
       - "4444:4444"
     volumes:
       - "./selenoid/browsers.json:/etc/selenoid/browsers.json"
       - "/var/run/docker.sock:/var/run/docker.sock"
-    command:
-        - "-listen"
-        - ":4444"
-        - "-conf"
-        - "/etc/selenoid/browsers.json"
-        - "-limit"
-        - "10"
-        - "-timeout"
-        - "5m"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:4444/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   selenoid-ui:
-    image: aerokube/selenoid-ui
-    container_name: selenoid-ui
-    restart: always
+    image: "aerokube/selenoid-ui"
+    network_mode: bridge
     links:
       - selenoid
+    depends_on:
+      selenoid:
+        condition: service_healthy
     ports:
-      - "8080:8080"
+      - "8080:8080" # Change Selenoid-UI to 8080
     command: ["--selenoid-uri", "http://selenoid:4444"]
+
+  jenkins:
+    image: "jenkins/jenkins:lts"
+    network_mode: bridge
+    ports:
+      - "8081:8080" # Change Jenkins to 8081
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    depends_on:
+      - selenoid
+
+volumes:
+  jenkins_home:
