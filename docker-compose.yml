@@ -19,6 +19,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    command: [
+      "-conf", "/etc/selenoid/browsers.json",
+      "-container-network", "e2e-network",
+      "-timeout", "60s",
+      "-session-attempt-timeout", "2m"
+    ]
 
   selenoid-ui:
     image: "aerokube/selenoid-ui"
