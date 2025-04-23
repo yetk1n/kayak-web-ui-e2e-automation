@@ -4,6 +4,7 @@ import com.sahibinden.pages.AracDegerlemePage;
 import com.sahibinden.pages.HomePage;
 import com.sahibinden.pages.IlanDetayPage;
 import com.sahibinden.pages.IlanlarPage;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,9 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)      // isteğe bağlı
+@Epic("Araç Değerleme")
+@Feature("Araç Fiyat Sorgulama")
 public class AracDegerlemeTest extends BaseTest {
 
     @Test
+    @Description("Araç değerleme ve ilan kontrolü testi")
+    @Severity(SeverityLevel.CRITICAL)
     public void testAracDegerlemeAndIlanlar() throws InterruptedException {
         logInfo("Test başlatılıyor: Araç Değerleme ve İlan Kontrolü");
 

@@ -23,7 +23,7 @@ pipeline {
                 sh 'mvn test -Dbrowser=$BROWSER -DremoteUrl=$REMOTE_URL'
             }
         }
-        stage('Generate Report') {
+        stage('Generate Allure Report') {
             steps {
                 sh 'mvn allure:report'
             }
@@ -31,8 +31,11 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts artifacts: '**/target/*.xml', allowEmptyArchive: true
+            archiveArtifacts artifacts: '**/target/allure-results/**', allowEmptyArchive: true
             junit '**/target/surefire-reports/*.xml'
+        }
+        success {
+            allure includeProperties: false, results: [[path: '**/target/allure-results']]
         }
     }
 }
