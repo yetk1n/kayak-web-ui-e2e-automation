@@ -145,6 +145,7 @@
                     <systemPropertyVariables>
                         <browser>${browser}</browser>
                         <remoteUrl>${remoteUrl}</remoteUrl>
+                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>

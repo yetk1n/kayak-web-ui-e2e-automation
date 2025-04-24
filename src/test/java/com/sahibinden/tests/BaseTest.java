@@ -1,19 +1,16 @@
 package com.sahibinden.tests;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.sahibinden.config.ConfigurationManager;
 import com.sahibinden.driver.DriverManager;
-import org.junit.jupiter.api.AfterAll;
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -37,26 +34,12 @@ public abstract class BaseTest {
     protected DriverManager driverManager;
 
     protected WebDriver driver;
-    protected static ExtentReports extentReports;
-    protected ExtentTest extentTest;
 
-    @BeforeAll
-    public static void setupReporting() {
-        String reportPath = "reports/";
-        new File(reportPath).mkdirs();
-
-        String reportFileName = reportPath + "TestReport_" +
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")) + ".html";
-
-        ExtentSparkReporter sparkReporter = new ExtentSparkReporter(reportFileName);
-        extentReports = new ExtentReports();
-        extentReports.attachReporter(sparkReporter);
-    }
+    private static final Logger log = LoggerFactory.getLogger(BaseTest.class);
 
     @BeforeEach
     public void setUp() {
         driver = driverManager.getDriver();
-        extentTest = extentReports.createTest(getClass().getSimpleName());
     }
 
     @AfterEach
@@ -66,26 +49,20 @@ public abstract class BaseTest {
         }
     }
 
-    @AfterAll
-    public static void tearDownAll() {
-        if (extentReports != null) {
-            extentReports.flush();
-        }
-    }
 
     protected void logInfo(String message) {
-        extentTest.log(Status.INFO, message);
+        log.info(message);
+        Allure.step(message);
     }
 
-    protected void logPass(String message) {
-        extentTest.log(Status.PASS, message);
-    }
 
     protected void logFail(String message) {
-        extentTest.log(Status.FAIL, message);
+        log.error("FAIL: " + message);
+        takeScreenshot("Failure_Screenshot");
+        Allure.step(message);
     }
 
-    protected String takeScreenshot() {
+    protected String takeScreenshot(String failureScreenshot) {
         try {
             String screenshotDir = "screenshots/";
             new File(screenshotDir).mkdirs();
