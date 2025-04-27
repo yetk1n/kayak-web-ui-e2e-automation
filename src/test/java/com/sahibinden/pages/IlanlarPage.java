@@ -3,6 +3,7 @@ package com.sahibinden.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +11,23 @@ import java.util.List;
 public class IlanlarPage extends BasePage {
 
     private final By ilanList = By.cssSelector(".searchResultsItem");
+    private final By ilanListMobile = By.xpath("//li[contains(@class,'search-result-item')]//a[contains(@class,'search-classified-link')]//div[contains(@class,'item-price')]/span");
     private final By sortingDropdown = By.id("advancedSorting");
+    private final By sortingDropdownMobile = By.id("sorting");
     private final By enDusukFiyatOption = By.xpath("//a[@title='Fiyata göre (Önce en düşük)']");
     private final By ilanFiyatlari = By.cssSelector("td.searchResultsPriceValue .classified-price-container span");
+    private final By ilanFiyatlariMobile = By.cssSelector(".item-price span");
     private final By ilanIsimleri = By.cssSelector("a.classifiedTitle");
+    private final By ilanIsimleriMobile = By.className("item-title");
+
+
     private final By ilkIlan = By.cssSelector("tr.searchResultsItem a[class*='classifiedTitle']:first-of-type");
+    private final By ilanlarMobile = By.cssSelector("a.search-classified-link");
+
     private final By filters = By.className("facetedFilteredLink");
+    private final By filterButtonMobile = By.className("search-filter");
+
+
 
     public IlanlarPage(WebDriver driver) {
         super(driver);
@@ -23,7 +35,13 @@ public class IlanlarPage extends BasePage {
 
     public boolean areIlansDisplayed() {
         waitForPageLoad();
-        List<WebElement> ilanlar = findElements(ilanList);
+        List<WebElement> ilanlar;
+        if (isMobileView()){
+            ilanlar = findElements(ilanListMobile);
+        }
+        else {
+            ilanlar = findElements(ilanList);
+        }
         return !ilanlar.isEmpty();
     }
 
@@ -42,18 +60,38 @@ public class IlanlarPage extends BasePage {
     }
 
     public void sortByLowestPrice() throws InterruptedException {
-        click(sortingDropdown);
-        waitForElementVisible(enDusukFiyatOption);
-        Thread.sleep(1000);
-        click(enDusukFiyatOption);
-        Thread.sleep(1000);
-        waitForPageLoad();
+        if(!isMobileView()){
+            click(sortingDropdown);
+            waitForElementVisible(enDusukFiyatOption);
+            Thread.sleep(1000);
+            click(enDusukFiyatOption);
+            Thread.sleep(1000);
+            waitForPageLoad();
+        }
+        else {
+            Select sortingSelect = new Select(driver.findElement(sortingDropdownMobile));
+            sortingSelect.selectByValue("price_asc"); // Fiyata göre (Önce en düşük)
+            Thread.sleep(1000);
+            waitForPageLoad();
+        }
+    }
+
+    public void openFilters() {
+        if (isMobileView()) {
+            click(filterButtonMobile);
+        }
     }
 
     public boolean arePricesInAscendingOrder() {
         waitForPageLoad();
-        // Find all the elements that contain the prices
-        List<WebElement> priceElements = findElements(ilanFiyatlari);
+        List<WebElement> priceElements;
+        if (!isMobileView()) {
+            // Find all the elements that contain the prices
+            priceElements = findElements(ilanFiyatlari);
+        } else {
+            priceElements = findElements(ilanFiyatlariMobile);
+        }
+
 
         // List to store the numeric values of prices
         List<Double> prices = new ArrayList<>();
@@ -81,18 +119,29 @@ public class IlanlarPage extends BasePage {
     }
 
     public String getFirstIlanTitle() {
-        List<WebElement> ilanTitles = findElements(ilanIsimleri);
+        List<WebElement> ilanTitles;
+        if(isMobileView()){
+            ilanTitles = findElements(ilanIsimleriMobile);
+        }
+        else{
+            ilanTitles = findElements(ilanIsimleri);
+        }
         // Get the first <a> element
         WebElement firstClassifiedTitleElement = ilanTitles.get(0);
 
         // Extract the title attribute
-        String title = firstClassifiedTitleElement.getAttribute("title");
-
-        return title;
+//        String title = firstClassifiedTitleElement.getAttribute("title");
+        return firstClassifiedTitleElement.getText();
     }
 
     public double getFirstIlanPrice() {
-        List<WebElement> priceElements = findElements(ilanFiyatlari);
+        List<WebElement> priceElements;
+        if(isMobileView()){
+            priceElements = findElements(ilanFiyatlariMobile);
+        }
+        else{
+            priceElements = findElements(ilanFiyatlari);
+        }
         // Get the first <a> element
         WebElement priceElement = priceElements.get(0);
         String priceText = priceElement.getText().trim().replace("TL", "").replace(".", "");
@@ -102,7 +151,12 @@ public class IlanlarPage extends BasePage {
     }
 
     public IlanDetayPage clickFirstIlan() {
-        click(ilkIlan);
+        if(isMobileView()){
+            click(ilanlarMobile);
+        }
+        else{
+            click(ilkIlan);
+        }
         waitForPageLoad();
         return new IlanDetayPage(driver);
     }

@@ -1,5 +1,6 @@
 package com.sahibinden.pages;
 
+import com.sahibinden.SpringContext;
 import com.sahibinden.config.ConfigurationManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -13,18 +14,23 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-public abstract class BasePage extends ConfigurationManager{
+public abstract class BasePage{
     protected WebDriver driver;
     protected WebDriverWait wait;
-
+    protected ConfigurationManager config;
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-
+        this.config = SpringContext.getBean(ConfigurationManager.class);
         // only this part
         // only this part over
         PageFactory.initElements(driver, this);
+    }
+
+    // When checking mobile view
+    protected boolean isMobileView() {
+        return config.isMobileView();
     }
 
     protected WebElement waitForElementVisible(By locator) {
@@ -56,7 +62,7 @@ public abstract class BasePage extends ConfigurationManager{
 
     protected void clickOnText(String text) throws InterruptedException {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='" + text + "']")));
-        Thread.sleep(300);
+//        Thread.sleep(300);
         element.click();
     }
 

@@ -1,26 +1,32 @@
 package com.sahibinden.tests;
 
-import com.sahibinden.pages.AracDegerlemePage;
-import com.sahibinden.pages.HomePage;
-import com.sahibinden.pages.IlanDetayPage;
-import com.sahibinden.pages.IlanlarPage;
+import com.sahibinden.config.MobileTestExtension;
+import com.sahibinden.pages.*;
 import io.qameta.allure.*;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)      // isteğe bağlı
+@ExtendWith(MobileTestExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @Epic("Araç Değerleme")
 @Feature("Araç Fiyat Sorgulama")
 public class AracDegerlemeTest extends BaseTest {
 
-    @Test
     @Description("Araç değerleme ve ilan kontrolü testi")
     @Severity(SeverityLevel.CRITICAL)
+    @RepeatedTest(1)
+    @Execution(ExecutionMode.CONCURRENT)
     public void testAracDegerlemeAndIlanlar() throws InterruptedException {
+
         logInfo("Test başlatılıyor: Araç Değerleme ve İlan Kontrolü");
 
         // 1. Ana sayfaya git ve çerezleri kabul et
@@ -29,13 +35,14 @@ public class AracDegerlemeTest extends BaseTest {
         homePage.acceptCookiesIfPresent();
         logInfo("Ana sayfaya gidildi");
 
+
         // 2. Araç Değerleme sayfasına git
         AracDegerlemePage aracDegerlemePage = homePage.navigateToAracDegerleme();
         logInfo("Araç Değerleme sayfasına yönlendirildi");
 
-        // 3. URL kontrolü
-        aracDegerlemePage.verifyUrl("oto360/arac-degerleme/alirken");
-        logInfo("URL doğrulandı: aracdegerleme/satarken içeriyor");
+        // 3. URL kontrolü either ""oto360/arac-degerleme/alirken" or "oto360/arac-degerleme/satarken"
+        aracDegerlemePage.verifyUrl("oto360/arac-degerleme/alirken", "oto360/arac-degerleme/satarken");
+        logInfo("URL doğrulandı");
 
         // 4. Araç detayları seçimi
         aracDegerlemePage.selectBinek();

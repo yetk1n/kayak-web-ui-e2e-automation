@@ -24,7 +24,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(properties = {
+        "spring.main.allow-bean-definition-overriding=true",
+})
 public abstract class BaseTest {
 
     @Autowired

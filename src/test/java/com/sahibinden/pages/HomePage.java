@@ -9,7 +9,8 @@ public class HomePage extends BasePage {
     private final By tumunuGosterLabel = By.cssSelector("label.open-categories[for='category-auto360']");
 
     // Locators for mobile
-    private final By aracDegerlemeLinkMobile = By.id("mobile-evaluate-link");
+    private final By servislerTabMobile = By.cssSelector("a[track-label='altbar_servisler']");
+
     private final By tumunuGosterLabelMobile = By.cssSelector("label.mobile-open-categories");
 
     public HomePage(WebDriver driver) {
@@ -33,5 +34,10 @@ public class HomePage extends BasePage {
         waitForElementVisible(aracDegerlemeLink);
         click(aracDegerlemeLink);
         return new AracDegerlemePage(driver);
+    }
+
+    public MobileServislerPage navigateToMobileServislerTab() {
+        click(servislerTabMobile);
+        return new MobileServislerPage(driver);
     }
 }

@@ -31,14 +31,24 @@ public class ConfigurationManager {
     @Value("${headless:false}")
     private boolean headless;
 
-    @Value("${mobile.view:false}")
+    @Value("${mobile.view}")
     private boolean mobileView;
 
     @Value("${mobile.device:iPhone 12}")
     private String mobileDevice;
 
+//    public boolean isMobileView() {
+//        return mobileView;
+//    }
+
     public boolean isMobileView() {
-        return mobileView;
+        // First check system property
+        String sysProp = System.getProperty("mobile.view");
+        if (sysProp != null) {
+            return Boolean.parseBoolean(sysProp);
+        }
+        // Fall back to application.properties
+        return Boolean.parseBoolean(String.valueOf(mobileView));
     }
 
     public String getMobileDevice() {
