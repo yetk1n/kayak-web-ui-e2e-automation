@@ -146,6 +146,9 @@ public class DriverManager {
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-extensions");
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
 
         options.setCapability("selenoid:options", Map.of(
                 "enableVNC", true,
