@@ -39,10 +39,6 @@ public class IlanDetayPage extends BasePage {
     }
 
     public void closeFavoritePopup() {
-//        By closeButton = By.cssSelector("div[class*='popup-close']");
-//        if (isElementDisplayed(closeButton)) {
-//            click(closeButton);
-//        }
         if (isElementDisplayed(priceHistoryIcon)) {
             click(priceHistoryIcon);
         }

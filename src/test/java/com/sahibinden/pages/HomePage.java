@@ -11,8 +11,6 @@ public class HomePage extends BasePage {
     // Locators for mobile
     private final By servislerTabMobile = By.cssSelector("a[track-label='altbar_servisler']");
 
-    private final By tumunuGosterLabelMobile = By.cssSelector("label.mobile-open-categories");
-
     public HomePage(WebDriver driver) {
         super(driver);
     }

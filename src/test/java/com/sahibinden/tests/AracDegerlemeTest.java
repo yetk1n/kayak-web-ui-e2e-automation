@@ -59,11 +59,6 @@ public class AracDegerlemeTest extends BaseTest {
         aracDegerlemePage.seeResults();
         logInfo("Sonuçları gör butonuna tıklandı");
 
-        // 5. Değerleme sonuçlarının kontrolü
-        boolean isDegerlemeSonucDisplayed = aracDegerlemePage.isDegerlemeSonucDisplayed();
-//        assertTrue(isDegerlemeSonucDisplayed, "Değerleme sonucu görüntülenmelidir");
-        logInfo("Değerleme sonuçları görüntüleniyor");
-
         // 6. Fiyat aralıklarının kontrolü
         aracDegerlemePage.verifyValueRanges();
         logInfo("Fiyat aralıkları doğrulandı");

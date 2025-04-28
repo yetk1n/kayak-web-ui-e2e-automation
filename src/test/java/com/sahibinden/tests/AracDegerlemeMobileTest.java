@@ -55,7 +55,6 @@ public class AracDegerlemeMobileTest extends BaseTest {
 
         // 4. Araç detayları seçimi
         aracDegerlemePage.selectBinek();
-//        Thread.sleep(1500);
         aracDegerlemePage.selectCategory("2020");
         logInfo("2020 yılı seçildi");
         aracDegerlemePage.selectCategory("Citroen");

@@ -23,8 +23,6 @@ public abstract class BasePage{
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
         this.config = SpringContext.getBean(ConfigurationManager.class);
-        // only this part
-        // only this part over
         PageFactory.initElements(driver, this);
     }
 
@@ -62,7 +60,6 @@ public abstract class BasePage{
 
     protected void clickOnText(String text) throws InterruptedException {
         WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()='" + text + "']")));
-//        Thread.sleep(300);
         element.click();
     }
 

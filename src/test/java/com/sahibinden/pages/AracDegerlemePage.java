@@ -6,17 +6,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.util.List;
 
 public class AracDegerlemePage extends BasePage {
 
     // Web elements
     private final By aracDegerleButton = By.id("evaluateVehiclePrice");
+
     private final By categoryOtomobil = By.xpath("//span[text()='Otomobil']");
     private final By categoryOtomobilMobile = By.linkText("Otomobil");
 
-    private final By categoriesBoxes = By.xpath("//ul[@class='category-selectbox']//span");
-//    private final By  = By.id("mileage-value");
     private final By kmInput = By.xpath("//input[contains(@placeholder, 'Kilometre') or @id='mileage-value' or @id='mileageInput']");
     private final By calculateButton = By.xpath("//button[text()='Aracın Değerini Göster'] | //a[span[text()='Aracın Değerini Göster']]");
 
@@ -25,9 +23,10 @@ public class AracDegerlemePage extends BasePage {
     private final By lowerLimitMobile = By.xpath("//li[.//span[text()='Düşük Fiyat']]//span[contains(@class,'item-price-range')]");
     private final By median = By.id("median");
     private final By medianMobile = By.xpath("//li[.//span[text()='Piyasa Ortalaması']]//span[contains(@class,'item-price-range')]");
+
     private final By upperLimit = By.id("upperLimit");
     private final By upperLimitMobile = By.xpath("//li[.//span[text()='Yüksek Fiyat']]//span[contains(@class,'item-price-range')]");
-//    private final By resultPage = By.id("result-page");
+
     private final By resultPage = By.className("results");
 
     private final By benzerIlanlarLinki = By.cssSelector("a.similar-classifieds-link");
@@ -39,10 +38,6 @@ public class AracDegerlemePage extends BasePage {
         super(driver);
     }
 
-    // URL kontrolü either ""oto360/arac-degerleme/alirken" or "oto360/arac-degerleme/satarken"
-//    public void verifyUrl(String expectedUrl) {
-//        wait.until(driver -> driver.getCurrentUrl().contains(expectedUrl));
-//    }
 
     public void verifyUrl(String url1, String url2) {
         wait.until(driver -> {
@@ -59,11 +54,6 @@ public class AracDegerlemePage extends BasePage {
             click(categoryOtomobil);
         }
     }
-
-//    public void selectCategory(String categoryText) throws InterruptedException {
-////        Thread.sleep(1000);
-//        clickOnText(categoryText);
-//    }
 
     public void selectCategory(String categoryText) {
         // Find the element
@@ -124,8 +114,6 @@ public class AracDegerlemePage extends BasePage {
     private double extractMaxValue(String rangeText) {
         return Double.parseDouble(rangeText.split("-")[1].trim().replace(".", "").replace(",", "."));
     }
-
-
 
     public boolean isDegerlemeSonucDisplayed() {
         return isElementDisplayed(resultPage);

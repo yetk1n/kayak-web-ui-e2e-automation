@@ -129,8 +129,6 @@ public class IlanlarPage extends BasePage {
         // Get the first <a> element
         WebElement firstClassifiedTitleElement = ilanTitles.get(0);
 
-        // Extract the title attribute
-//        String title = firstClassifiedTitleElement.getAttribute("title");
         return firstClassifiedTitleElement.getText();
     }
 
