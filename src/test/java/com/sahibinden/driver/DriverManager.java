@@ -2,23 +2,18 @@ package com.sahibinden.driver;
 
 import com.sahibinden.config.ConfigurationManager;
 import com.sahibinden.tests.BaseTest;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.firefox.GeckoDriverService;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
@@ -49,7 +44,6 @@ public class DriverManager {
 
         switch (browser) {
             case "chrome":
-                WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = createStealthChromeOptions();
                 if (config.isHeadless()) {
                     chromeOptions.addArguments("--headless=new");
@@ -57,23 +51,12 @@ public class DriverManager {
                 if (isRemote) {
                     webDriver = createRemoteWebDriver(chromeOptions);
                 } else {
-                    // Dinamik port atanmış ChromeDriverService
-                    String driverPath = System.getProperty("webdriver.chrome.driver");
-                    ChromeDriverService service = new ChromeDriverService.Builder()
-                            .usingDriverExecutable(new File(driverPath))
-                            .usingAnyFreePort()
-                            .build();
-                    try {
-                        service.start();
-                    } catch (Exception e) {
-                        throw new RuntimeException("Failed to start ChromeDriverService", e);
-                    }
-                    webDriver = new ChromeDriver(service, chromeOptions);
+                    // Use Selenium's built-in manager (no setup call needed)
+                    webDriver = new ChromeDriver(chromeOptions);
                 }
                 break;
 
             case "firefox":
-                WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions firefoxOptions = createStealthFirefoxOptions();
                 if (config.isHeadless()) {
                     firefoxOptions.addArguments("--headless");
@@ -81,28 +64,17 @@ public class DriverManager {
                 if (isRemote) {
                     webDriver = createRemoteWebDriver(firefoxOptions);
                 } else {
-                    // Dinamik port atanmış GeckoDriverService
-                    String geckoPath = System.getProperty("webdriver.gecko.driver");
-                    GeckoDriverService geckoService = new GeckoDriverService.Builder()
-                            .usingDriverExecutable(new File(geckoPath))
-                            .usingAnyFreePort()
-                            .build();
-                    try {
-                        geckoService.start();
-                    } catch (Exception e) {
-                        throw new RuntimeException("Failed to start GeckoDriverService", e);
-                    }
-                    webDriver = new FirefoxDriver(geckoService, firefoxOptions);
+                    // Use Selenium's built-in manager (no setup call needed)
+                    webDriver = new FirefoxDriver(firefoxOptions);
                 }
                 break;
 
             case "edge":
+                EdgeOptions edgeOptions = createStealthEdgeOptions();
                 if (isRemote) {
-                    EdgeOptions edgeOptions = createStealthEdgeOptions();
                     webDriver = createRemoteWebDriver(edgeOptions);
                 } else {
-                    WebDriverManager.edgedriver().setup();
-                    EdgeOptions edgeOptions = createStealthEdgeOptions();
+                    // Use Selenium's built-in manager (no setup call needed)
                     webDriver = new EdgeDriver(edgeOptions);
                 }
                 break;
@@ -111,13 +83,13 @@ public class DriverManager {
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
 
-        // Genel ayarlar
+        // General settings
         webDriver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getTimeout()));
         if (!config.isMobileView()) {
             webDriver.manage().window().maximize();
         }
 
-        // Selenoid için stealth script
+        // Selenoid stealth script
         if (webDriver instanceof RemoteWebDriver) {
             ((RemoteWebDriver) webDriver).executeScript(
                     "Object.defineProperty(navigator, 'webdriver', {get: () => undefined});" +
@@ -146,7 +118,6 @@ public class DriverManager {
         options.addArguments("--disable-gpu");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-extensions");
-        options.addArguments("--headless=new");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
 

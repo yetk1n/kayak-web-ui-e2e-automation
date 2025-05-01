@@ -40,7 +40,6 @@ A robust end-to-end test automation framework for [Sahibinden.com](https://www.s
 1. **Clone the repository**:
    ```bash
    git clone <repository-url>
-   cd sahibinden-e2e-automation
    ```
 
 2. **Start Selenoid with Docker**:
