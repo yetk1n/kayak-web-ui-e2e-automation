@@ -1,4 +1,4 @@
-package com.sahibinden;
+package com.kayak;
 
 import org.springframework.context.ApplicationContext;
 

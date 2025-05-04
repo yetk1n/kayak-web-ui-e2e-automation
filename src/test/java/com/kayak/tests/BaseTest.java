@@ -1,7 +1,7 @@
-package com.sahibinden.tests;
+package com.kayak.tests;
 
-import com.sahibinden.config.ConfigurationManager;
-import com.sahibinden.driver.DriverManager;
+import com.kayak.config.ConfigurationManager;
+import com.kayak.driver.DriverManager;
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,4 @@
-package com.sahibinden.config;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
+package com.kayak.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

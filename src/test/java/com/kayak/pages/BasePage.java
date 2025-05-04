@@ -1,11 +1,9 @@
-package com.sahibinden.pages;
+package com.kayak.pages;
 
-import com.sahibinden.SpringContext;
-import com.sahibinden.config.ConfigurationManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.kayak.SpringContext;
+import com.kayak.config.ConfigurationManager;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -69,6 +67,27 @@ public abstract class BasePage{
         element.sendKeys(text);
     }
 
+    protected void scrollToTheTop() {
+        ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
+    }
+
+    //scroll to element if exists
+    protected boolean scrollToElementIfExists(By locator) {
+        try {
+            WebElement element = waitForElementVisible(locator);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            return true;
+        } catch (NoSuchElementException e) {
+            // Element not found, do nothing
+        }
+        return false;
+    }
+
+    protected void sendEnter() {
+        Actions actions = new Actions(driver);
+        actions.sendKeys(Keys.ENTER).perform();
+    }
+
     protected List<WebElement> findElements(By locator) {
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
     }
@@ -76,6 +95,23 @@ public abstract class BasePage{
     protected void scrollToElement(By locator) {
         WebElement element = waitForElementVisible(locator);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+    }
+
+    protected void scrollToWebElement(WebElement outboundFlight) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", outboundFlight);
+        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,-100);");
+    }
+
+    protected void waitForWebElementVisible(WebElement outboundFlight) {
+        try {
+            wait.until(ExpectedConditions.visibilityOf(outboundFlight));
+        } catch (StaleElementReferenceException e) {
+            // Handle stale element reference exception
+            System.out.println("StaleElementReferenceException: " + e.getMessage());
+        } catch (Exception e) {
+            // Handle other exceptions
+            System.out.println("Exception: " + e.getMessage());
+        }
     }
 
     protected boolean isElementDisplayed(By locator) {

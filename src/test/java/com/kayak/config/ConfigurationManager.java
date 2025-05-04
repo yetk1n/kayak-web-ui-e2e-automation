@@ -1,4 +1,4 @@
-package com.sahibinden.config;
+package com.kayak.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

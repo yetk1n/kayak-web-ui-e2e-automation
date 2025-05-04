@@ -1,7 +1,7 @@
-package com.sahibinden.driver;
+package com.kayak.driver;
 
-import com.sahibinden.config.ConfigurationManager;
-import com.sahibinden.tests.BaseTest;
+import com.kayak.config.ConfigurationManager;
+import com.kayak.tests.BaseTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
