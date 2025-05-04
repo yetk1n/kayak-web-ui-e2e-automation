@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'maven3' // Use the Maven tool configured in Jenkins
+        maven 'maven3' // Use the Maven tool configured in  Jenkins
     }
     environment {
         BROWSER = 'chrome'
