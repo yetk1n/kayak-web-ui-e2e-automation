@@ -9,6 +9,23 @@
 
 This project is an end-to-end (E2E) test automation framework for the **Kayak** website. It supports running tests locally, with Docker, and in a Jenkins CI/CD pipeline. The framework also includes infrastructure for running tests in both web and mobile views in parallel.
 
+## 📋 Features
+
+- ✅ **Parallel Test Execution**: Run desktop and mobile tests concurrently
+- 🌐 **Cross-browser Testing**: Support for Chrome, Firefox and Edge
+- 📱 **Responsive Testing**: Dedicated mobile view tests with device emulation
+- 🔄 **CI/CD Integration**: Ready-to-use Jenkins pipeline
+- 📊 **Reporting**: Integrated Allure reporting
+- 🐳 **Containerization**: Complete Docker setup with Selenoid
+
+## 🏗️ Architecture
+
+- **Page Object Model**: Clean separation of test logic and page interactions
+- **Test Annotations**: Custom `@MobileTest` annotation for mobile-specific tests
+- **Spring Boot Integration**: Configuration management and dependency injection
+- **Thread-safe Design**: Safe parallel execution with ThreadLocal driver management
+
+
 ---
 
 ## 📖 Table of Contents
